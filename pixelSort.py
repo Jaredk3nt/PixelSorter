@@ -1,7 +1,10 @@
 import sys, getopt
 from PIL import Image
 
-colorBarrier = 80
+#define different thresholds
+SThreshold = 0.05
+LThreshold = 0.2
+mode = 0
 
 def displayImage(image):
 	image.show()
@@ -9,11 +12,10 @@ def displayImage(image):
 # sort the pixels by their hue
 def colorSort(pixels):
 	start = 0
-	end = 0;
+	end = 0
 	while (end < len(pixels) - 1):
 		start = getFirstNonBlack(start, pixels)
 		end = getNextBlack(start, pixels)
-
 		if (end < 0):
 			break
 
@@ -23,7 +25,10 @@ def colorSort(pixels):
 
 #get the next pixel with a sum greater than 60
 def getFirstNonBlack(index, pixels):
-	while (rgbsum(pixels[index]) < colorBarrier):
+	# find the mode being used currently
+	threshold = findThreshold()
+
+	while (findHSL(pixels[index]) < threshold):
 		index += 1
 		if (index >= len(pixels)):
 			return -1
@@ -31,15 +36,53 @@ def getFirstNonBlack(index, pixels):
 
 # get the next pixel with a sum less than 60
 def getNextBlack(index, pixels):
-	while (rgbsum(pixels[index]) > colorBarrier):
+	value = 0
+	colorThreshold = 0
+	# find the mode being used currently
+	threshold = findThreshold()
+
+	while (findHSL(pixels[index]) > threshold):
 		index += 1
 		if (index >= len(pixels)):
 			return -1
 	return index
 
-# return the sum of the rgb values
-def rgbsum(color):
-	return color[0] + color[1] + color[2]
+def findValue(index, pixels):
+	value = 0
+	if(mode == 0 or mode == 1):
+		value = findHSL(pixels[index])
+	else:
+		#for now since there is nothing else
+		value = findHSL(pixels[index])
+	return value
+
+def findThreshold():
+	threshold = 0
+	if(mode == 0):
+		threshold = LThreshold
+	else:
+		threshold = SThreshold
+	return threshold
+
+# find HSL values for the RGB color
+def findHSL(color):
+	r = color[0]/255.0
+	g = color[1]/255.0
+	b = color[2]/255.0
+	maxValue = max(r, g, b)
+	minValue = min(r, g, b)
+	l = (maxValue + minValue)/2.0
+	# if lightness mode return l
+	if (mode == 0):
+		#print(l)
+		return l
+	# otherwise we use it to find the other values
+	s = 0
+	if (l > 0.5):
+		s = (maxValue - minValue)/(2.0 - (maxValue - minValue))
+	else:
+		s = (maxValue - minValue)/(maxValue + minValue)
+	return s
 
 def quicksortImage(pixels):
 	quicksortHelper(1000, len(pixels) - 1000, pixels)
@@ -72,11 +115,12 @@ def swap(i, j, pixels):
 	pixels[j] = temp
 
 def main(argv):
+	global mode
 	inputfile = ''
 	outputfile = ''
 	colorSorting = False
 	try:
-		opts, args = getopt.getopt(argv, "hci:o:", ["ifile=","ofile="])
+		opts, args = getopt.getopt(argv, "hlsi:o:", ["ifile=","ofile="])
 	except getopt.GetoptError:
 		print 'test.py -i <inputfile> -o <outputfile>'
 		sys.exit(2)
@@ -84,8 +128,11 @@ def main(argv):
 		if opt == '-h':
 			print 'test.py -i <inputfile> -o <outputfile>'
 			sys.exit()
-		elif opt == "-c":
+		elif opt == "-l":
 			colorSorting = True
+		elif opt == "-s":
+			colorSorting = True
+			mode = 1
 		elif opt in ("-i", "--ifile"):
 			inputfile = arg
 		elif opt in ("-o", "--ofile"):
