@@ -2,7 +2,7 @@ import sys, getopt
 from PIL import Image
 
 #define different thresholds
-SThreshold = 0.05
+SThreshold = 0.2
 LThreshold = 0.2
 mode = 0
 
@@ -81,7 +81,12 @@ def findHSL(color):
 	if (l > 0.5):
 		s = (maxValue - minValue)/(2.0 - (maxValue - minValue))
 	else:
-		s = (maxValue - minValue)/(maxValue + minValue)
+		top = maxValue - minValue
+		bottom = maxValue + minValue
+		if (bottom == 0):
+			s = 1.0
+		else:
+			s = (maxValue - minValue)/(maxValue + minValue)
 	return s
 
 def quicksortImage(pixels):
