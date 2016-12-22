@@ -1,6 +1,8 @@
 import sys, getopt
 from PIL import Image
 
+colorBarrier = 80
+
 def displayImage(image):
 	image.show()
 
@@ -9,7 +11,6 @@ def colorSort(pixels):
 	start = 0
 	end = 0;
 	while (end < len(pixels) - 1):
-		print("color sorting")
 		start = getFirstNonBlack(start, pixels)
 		end = getNextBlack(start, pixels)
 
@@ -22,7 +23,7 @@ def colorSort(pixels):
 
 #get the next pixel with a sum greater than 60
 def getFirstNonBlack(index, pixels):
-	while (rgbsum(pixels[index]) < 60):
+	while (rgbsum(pixels[index]) < colorBarrier):
 		index += 1
 		if (index >= len(pixels)):
 			return -1
@@ -30,7 +31,7 @@ def getFirstNonBlack(index, pixels):
 
 # get the next pixel with a sum less than 60
 def getNextBlack(index, pixels):
-	while (rgbsum(pixels[index]) > 60):
+	while (rgbsum(pixels[index]) > colorBarrier):
 		index += 1
 		if (index >= len(pixels)):
 			return -1
