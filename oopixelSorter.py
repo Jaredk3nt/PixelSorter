@@ -16,13 +16,14 @@ class PixelSorter:
 		self.im = Image.open(self.inputfile)
 		self.pixels = list(self.im.getdata())
 
-	def saveImage(self):
+	def saveImage(self, output):
 		imSorted = Image.new(self.im.mode, self.im.size)
 		imSorted.putdata(self.pixels)
-		imSorted.save("sorts/new.jpg")
+		imSorted.save(output)
 
-	def displayImage(self):
-		self.im.show()
+	def displayImage(self, output):
+		image = Image.open(output)
+		image.show()
 
 	# use a lightness value based sort
 	def lightnessSort(self):
@@ -174,8 +175,3 @@ class PixelSorter:
 
 	def updateHThreshold(self, value):
 		self.HThreshold = value
-
-
-psorter = PixelSorter("data/picture.jpg")
-psorter.hueSort()
-psorter.saveImage()

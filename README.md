@@ -1,8 +1,19 @@
-#Python based pixel sorter
-A simple Pillow based pixel sorter for the command line. Works with both JPG and PNG following a quick sort based algorithm.
+#Pixel Sorter
+A pixel sorter written in python.
+
+### Dependancies
+* [Pillow](https://python-pillow.org/)
 
 ###Usage
-pixelSort -i IMAGENAME -o OUTPUTIMAGENAME
+```pixelSort INPUT OUTPUT [--hue] [--saturation] [--lightness] ``` 
 
-> -l (optional flag) turns on a threshold using lightness values to seperate lighter and darker colors
--s (optional flag) turns on a threshold to use **saturation** values to sort
+### Options and parameters
+
+* ```INPUT``` *(required string)* - path to image file to be sorted
+* ```OUTPUT``` *(required string)* - path to image to be output to
+
+
+* ```--hue ``` or `-h `  *(optional string)* - turns on hue based sort
+* ```--saturation ``` or ```-s``` *(optional string)* - turns on saturation based sort
+* ```--lightness ``` or ```-l``` *(optional string)* - turns on highness based sort
+
