@@ -2,7 +2,7 @@ import sys, getopt
 from PIL import Image
 
 #define different thresholds
-SThreshold = 0.2
+SThreshold = 0.1
 LThreshold = 0.2
 mode = 0
 
@@ -14,8 +14,8 @@ def colorSort(pixels):
 	start = 0
 	end = 0
 	while (end < len(pixels) - 1):
-		start = getFirstNonBlack(start, pixels)
-		end = getNextBlack(start, pixels)
+		start = getNextStart(start, pixels)
+		end = getNextEnd(start, pixels)
 		if (end < 0):
 			break
 
@@ -24,7 +24,7 @@ def colorSort(pixels):
 		start = end + 1
 
 #get the next pixel with a sum greater than 60
-def getFirstNonBlack(index, pixels):
+def getNextStart(index, pixels):
 	# find the mode being used currently
 	threshold = findThreshold()
 
@@ -35,7 +35,7 @@ def getFirstNonBlack(index, pixels):
 	return index
 
 # get the next pixel with a sum less than 60
-def getNextBlack(index, pixels):
+def getNextEnd(index, pixels):
 	value = 0
 	colorThreshold = 0
 	# find the mode being used currently
