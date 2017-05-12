@@ -5,7 +5,7 @@ A pixel sorter written in python.
 * [Pillow](https://python-pillow.org/)
 
 ###Usage
-```pixelSort INPUT OUTPUT [--hue] [--saturation] [--lightness] ``` 
+```python pxlsrt.py INPUT OUTPUT [--hue] [--saturation] [--lightness] ``` 
 
 ### Options and parameters
 

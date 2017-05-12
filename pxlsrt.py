@@ -1,7 +1,8 @@
-import sys, getopt
+import sys, getopt, time
 from oopixelSorter import PixelSorter
 
 def main(argv):
+	
 	try:
 		opts, args = getopt.getopt(argv, ':hlsd', ['hue','saturation','lightness', 'display'])
 	except getopt.GetoptError:
@@ -22,7 +23,8 @@ def main(argv):
 			mode = 1
 		elif arg in ('-d', '--display'):
 			display = True
-
+	
+	#start = time.time()
 	pxlsrt = PixelSorter(ifile)
 	if (mode == 0):
 		pxlsrt.lightnessSort()
@@ -36,6 +38,9 @@ def main(argv):
 	pxlsrt.saveImage(ofile)
 	if(display):
 		pxlsrt.displayImage(ofile)
+
+	#end = time.time()
+	#print(end - start)
 
 
 if __name__ == '__main__':

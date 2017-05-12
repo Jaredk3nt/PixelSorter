@@ -8,7 +8,7 @@ class PixelSorter:
 	def __init__(self, inf):
 		# the various thresholds for sorts
 		self.HThreshold = 50
-		self.SThreshold = 0.1
+		self.SThreshold = 0.05
 		self.LThreshold = 0.2
 
 		self.inputfile = inf
